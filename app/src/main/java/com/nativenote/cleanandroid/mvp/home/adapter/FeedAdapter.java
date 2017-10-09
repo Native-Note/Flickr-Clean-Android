@@ -1,12 +1,17 @@
 package com.nativenote.cleanandroid.mvp.home.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.Handler;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -82,7 +87,26 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
                 .into(holder.flickrImage, new Callback() {
                     @Override
                     public void onSuccess() {
-                        holder.progress.setVisibility(View.GONE);
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                Bitmap bitmap = ((BitmapDrawable) holder.flickrImage.getDrawable()).getBitmap();
+                                Palette.from(bitmap)
+                                        .generate(new Palette.PaletteAsyncListener() {
+                                            @Override
+                                            public void onGenerated(Palette palette) {
+                                                Palette.Swatch textSwatch = palette.getLightMutedSwatch();
+                                                if (textSwatch == null) {
+                                                    textSwatch = palette.getLightVibrantSwatch();
+                                                }
+
+                                                holder.progress.setVisibility(View.GONE);
+                                                holder.authorBg.setBackgroundColor(textSwatch != null ? textSwatch.getRgb() : context.getResources().getColor(R.color.colorPrimary));
+                                                holder.author.setTextColor(textSwatch != null ? textSwatch.getTitleTextColor() : context.getResources().getColor(R.color.colorPrimaryDark));
+                                            }
+                                        });
+                            }
+                        }, 100);
                     }
 
                     @Override
@@ -113,6 +137,9 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
 
         @BindView(R.id.progress)
         ProgressBar progress;
+
+        @BindView(R.id.authorBg)
+        LinearLayout authorBg;
 
 
         public ViewHolder(View itemView) {

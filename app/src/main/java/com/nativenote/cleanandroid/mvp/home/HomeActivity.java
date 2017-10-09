@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -53,7 +54,7 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
         HomePresenter presenter = new HomePresenter(service, this);
         presenter.getFlickrFeeds();
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, 1));
         feedAdapter = new FeedAdapter(this, picasso);
         recyclerView.setAdapter(feedAdapter);
 

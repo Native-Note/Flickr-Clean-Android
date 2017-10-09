@@ -10,6 +10,7 @@
     app:cardUseCompatPadding="true">
 
     <RelativeLayout
+        android:id="@+id/dataLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -62,6 +63,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/authorBg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/textLayout"
